@@ -1,6 +1,7 @@
 package tests;
 
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,5 +16,6 @@ public class LoginTest {
 	@Test
 	public void verifyLoginFlow() {
 		loginSteps.login();
+		Serenity.takeScreenshot();
 	}
 }
