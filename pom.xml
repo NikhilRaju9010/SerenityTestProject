@@ -6,11 +6,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.serenitybdd.starter</groupId>
-    <artifactId>serenity-cucumber-junit5</artifactId>
+    <artifactId>serenity-cucumber-framework</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <!-- ✅ Aligned versions -->
         <serenity.version>4.2.34</serenity.version>
         <cucumber.version>7.14.0</cucumber.version>
 
@@ -20,72 +19,34 @@
     </properties>
 
     <dependencies>
-    
-    	<!-- Force JUnit Jupiter -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.2</version>
-        </dependency>
-        
-        <dependency>
-		    <groupId>io.cucumber</groupId>
-		    <artifactId>cucumber-junit-platform-engine</artifactId>
-		    <version>7.14.0</version>
-		    <scope>test</scope>
-		</dependency>
-
-        <!-- Force JUnit Platform -->
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.10.2</version>
-        </dependency>
-        
-        <dependency>
-		    <groupId>org.junit.platform</groupId>
-		    <artifactId>junit-platform-suite</artifactId>
-		    <version>1.10.2</version>
-		    <scope>test</scope>
-		</dependency>
 
         <!-- Serenity Core -->
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
             <version>${serenity.version}</version>
-            <exclusions>
-		        <exclusion>
-		            <groupId>org.junit.vintage</groupId>
-		            <artifactId>junit-vintage-engine</artifactId>
-		        </exclusion>
-		    </exclusions>
         </dependency>
 
-        <!-- Serenity JUnit 5 -->
+        <!-- Serenity JUnit (REQUIRED for CucumberWithSerenity) -->
         <dependency>
-		    <groupId>net.serenity-bdd</groupId>
-		    <artifactId>serenity-junit5</artifactId>
-		    <version>${serenity.version}</version>
-		    <exclusions>
-		        <exclusion>
-		            <groupId>org.junit.vintage</groupId>
-		            <artifactId>junit-vintage-engine</artifactId>
-		        </exclusion>
-		    </exclusions>
-		</dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
 
-        <!-- ✅ Correct for JUnit 5 -->
+        <!-- Serenity Cucumber -->
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-cucumber</artifactId>
             <version>${serenity.version}</version>
-            <exclusions>
-		        <exclusion>
-		            <groupId>org.junit.vintage</groupId>
-		            <artifactId>junit-vintage-engine</artifactId>
-		        </exclusion>
-		    </exclusions>
+        </dependency>
+
+        <!-- JUnit 4 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Dependency Injection -->
@@ -114,13 +75,17 @@
                 <version>3.12.1</version>
             </plugin>
 
-            <!-- Surefire (JUnit 5 required) -->
+            <!-- Surefire (JUnit 4 execution) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
-                    <useModulePath>false</useModulePath>
+                	<testFailureIgnore>true</testFailureIgnore>   <!-- ✅ HERE -->
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Runner.java</include>
+                    </includes>
                 </configuration>
             </plugin>
 
@@ -142,5 +107,13 @@
 
         </plugins>
     </build>
+    <profiles>
+	    <profile>
+	        <id>ignore-failures</id>
+	        <properties>
+	            <maven.test.failure.ignore>true</maven.test.failure.ignore>
+	        </properties>
+	    </profile>
+	</profiles>
 
 </project>

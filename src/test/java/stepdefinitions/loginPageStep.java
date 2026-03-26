@@ -18,9 +18,11 @@ public class loginPageStep {
 	}
 
 	@When("user enters valid credentials")
-	public void user_enters_valid_credentials() {
+	public void user_enters_valid_credentials() throws Exception{
 		loginpage.enterUsername(LoginData.VALID_USERNAME);
+		Thread.sleep(2000);
     	loginpage.enterPassword(LoginData.VALID_PASSWORD);
+    	Thread.sleep(3000);
     	loginpage.clickLogin();
 	}
 

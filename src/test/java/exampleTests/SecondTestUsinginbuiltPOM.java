@@ -1,16 +1,17 @@
 package exampleTests;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import org.junit.Test;
 
-@ExtendWith(SerenityJUnit5Extension.class)
+
+@RunWith(SerenityRunner.class)
 public class SecondTestUsinginbuiltPOM extends PageObject{
 	
 	@Managed

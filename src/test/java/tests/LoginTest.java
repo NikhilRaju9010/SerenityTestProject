@@ -1,19 +1,19 @@
 package tests;
 
 import net.serenitybdd.annotations.Steps;
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import steps.LoginSteps;
 
-@ExtendWith(SerenityJUnit5Extension.class)
+@RunWith(SerenityRunner.class)
 public class LoginTest {
 
-    @Steps
-    LoginSteps loginSteps;
+	@Steps
+	LoginSteps loginSteps;
 
-    @Test
-    void verifyLoginFlow() {
-        loginSteps.login();
-    }
+	@Test
+	public void verifyLoginFlow() {
+		loginSteps.login();
+	}
 }

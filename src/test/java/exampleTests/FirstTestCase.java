@@ -1,14 +1,14 @@
 package exampleTests;
 
 import net.serenitybdd.annotations.Managed;
-import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import net.serenitybdd.junit.runners.SerenityRunner;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-@ExtendWith(SerenityJUnit5Extension.class)
+@RunWith(SerenityRunner.class)
 public class FirstTestCase {
 
     @Managed
