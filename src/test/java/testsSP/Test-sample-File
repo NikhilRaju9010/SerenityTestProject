@@ -1,0 +1,180 @@
+// ui/LoginPage.java
+public class LoginPage {
+    public static final Target USERNAME = Target.the("username field")
+        .located(By.id("username"));
+
+    public static final Target PASSWORD = Target.the("password field")
+        .located(By.id("password"));
+
+    public static final Target LOGIN_BUTTON = Target.the("login button")
+        .located(By.id("login"));
+}
+
+--------
+
+// ui/ProductPage.java
+public class ProductPage {
+
+    public static final Target SEARCH_BOX = Target.the("search box")
+        .located(By.id("search"));
+
+    public static final Target SEARCH_BUTTON = Target.the("search button")
+        .located(By.id("searchBtn"));
+
+    public static final Target PRODUCT_ITEM = Target.the("product item")
+        .located(By.xpath("//div[text()='laptop']"));
+
+    public static final Target ADD_TO_CART = Target.the("add to cart button")
+        .located(By.id("addToCart"));
+
+    public static final Target CART_ITEM = Target.the("cart item")
+        .located(By.xpath("//div[text()='laptop']"));
+}
+
+--------------
+
+// tasks/Login.java
+public class Login implements Task {
+
+    private String username;
+    private String password;
+
+    public Login(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public static Login withCredentials(String username, String password) {
+        return Tasks.instrumented(Login.class, username, password);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        actor.attemptsTo(
+            Enter.theValue(username).into(LoginPage.USERNAME),
+            Enter.theValue(password).into(LoginPage.PASSWORD),
+            Click.on(LoginPage.LOGIN_BUTTON)
+        );
+    }
+}
+
+----------------------------------------
+
+// tasks/SearchProduct.java
+public class SearchProduct implements Task {
+
+    private String product;
+
+    public SearchProduct(String product) {
+        this.product = product;
+    }
+
+    public static SearchProduct forItem(String product) {
+        return Tasks.instrumented(SearchProduct.class, product);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        actor.attemptsTo(
+            Enter.theValue(product).into(ProductPage.SEARCH_BOX),
+            Click.on(ProductPage.SEARCH_BUTTON)
+        );
+    }
+}
+
+----------------
+
+// tasks/AddToCart.java
+public class AddToCart implements Task {
+
+    public static AddToCart item() {
+        return Tasks.instrumented(AddToCart.class);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        actor.attemptsTo(
+            Click.on(ProductPage.PRODUCT_ITEM),
+            Click.on(ProductPage.ADD_TO_CART)
+        );
+    }
+}
+
+---------------------
+
+Custom Intraction 
+
+// interactions/WaitAndClick.java
+public class WaitAndClick implements Interaction {
+
+    private Target target;
+
+    public WaitAndClick(Target target) {
+        this.target = target;
+    }
+
+    public static WaitAndClick on(Target target) {
+        return new WaitAndClick(target);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        WaitUntil.the(target, WebElementStateMatchers.isVisible())
+                 .forNoMoreThan(10).seconds();
+
+        actor.attemptsTo(
+            Click.on(target)
+        );
+    }
+}
+
+-------------------------------
+
+// questions/CartItemVisible.java
+public class CartItemVisible implements Question<Boolean> {
+
+    public static CartItemVisible isDisplayed() {
+        return new CartItemVisible();
+    }
+
+    @Override
+    public Boolean answeredBy(Actor actor) {
+        return ProductPage.CART_ITEM.resolveFor(actor).isVisible();
+    }
+}
+
+--------------------------
+
+// tests/AddToCartTest.java
+public class AddToCartTest {
+
+    WebDriver driver;
+
+    @Test
+    public void user_should_add_product_to_cart() {
+
+        Actor nikhil = Actor.named("Nikhil");
+        nikhil.can(BrowseTheWeb.with(driver));
+
+        nikhil.attemptsTo(
+            Open.url("https://example.com"),
+            Login.withCredentials("admin", "1234"),
+            SearchProduct.forItem("laptop"),
+            AddToCart.item()
+        );
+
+        nikhil.should(
+            seeThat(CartItemVisible.isDisplayed())
+        );
+    }
+}
+
+-----------------
+
+###  Foldres   ### 
+
+tests/
+tasks/
+interactions/
+questions/
+ui/
