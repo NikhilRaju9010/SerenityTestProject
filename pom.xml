@@ -62,6 +62,20 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.14</version>
         </dependency>
+        
+        <!-- Serenity REST (API Testing) -->
+	    <dependency>
+	        <groupId>net.serenity-bdd</groupId>
+	        <artifactId>serenity-rest-assured</artifactId>
+	        <version>${serenity.version}</version>
+	    </dependency>
+	
+	    <!-- Hamcrest (for assertions like equalTo, containsString) -->
+	    <dependency>
+	        <groupId>org.hamcrest</groupId>
+	        <artifactId>hamcrest</artifactId>
+	        <version>2.2</version>
+	    </dependency>
 
     </dependencies>
 
